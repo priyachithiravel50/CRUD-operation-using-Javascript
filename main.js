@@ -1,20 +1,21 @@
-// //Login Page
-// function login() {
-//     let username = document.getElementById('username').value;
-//     let password = document.getElementById('password').value;
-//     console.log("Username:", username);
-//     console.log("Password:", password);
+// // //Login Page
+// // function login() {
+// //     let username = document.getElementById('username').value;
+// //     let password = document.getElementById('password').value;
+// //     console.log("Username:", username);
+// //     console.log("Password:", password);
   
-//     // Display entered details
-//     let outputText = `<h2>Details</h2>
-//         <p>Username: ${username}</p>
-//         <p>Password: ${password}</p>`;
-//     document.getElementById('output').innerHTML = outputText;
-//   }
+// //     // Display entered details
+// //     let outputText = `<h2>Details</h2>
+// //         <p>Username: ${username}</p>
+// //         <p>Password: ${password}</p>`;
+// //     document.getElementById('output').innerHTML = outputText;
+// //   }
+
 
 // let entries = [];
 
-// function MyButton(event) {
+// function Click(event) {
 //     event.preventDefault();
 
 //     let userName = document.getElementById('Username').value;
@@ -23,9 +24,9 @@
 //     let nameError = document.getElementById('nameError');
 //     let passwordError = document.getElementById('passwordError');
 
+   
 //     let valid = true;
 
-//     // Username validation
 //     if (userName.trim() === "") {
 //         nameError.textContent = "Username is required*";
 //         nameError.style.color = "red";
@@ -36,7 +37,6 @@
 //         nameError.textContent = '';
 //     }
 
-//     // Password validation
 //     if (password.trim() === "") {
 //         passwordError.textContent = "Password is required*";
 //         passwordError.style.color = "red";
@@ -47,7 +47,7 @@
 //         passwordError.textContent = '';
 //     }
 
-//     // Add entry if valid
+
 //     if (valid) {
 //         entries.push({ userName, password });
 //         renderTable();
@@ -66,8 +66,8 @@
 //                 <td>${entries[i].userName}</td>
 //                 <td>${entries[i].password}</td>
 //                 <td>
-//                     <button onclick="editRow(${i})">Edit</button>
-//                     <button onclick="deleteRow(${i})">Delete</button>
+//                     <button style="background-color: Green;font-size:18px; padding:5px 5px; border-radius:5px;"  onclick="editRow(${i}) ">Edit</button>
+//                     <button style="background-color:red;font-size:18px; padding:5px 5px; border-radius:8px;"   onclick="deleteRow(${i})">Delete</button>
 //                 </td>
 //             </tr>
 //         `;
@@ -80,35 +80,45 @@
 //     document.getElementById("Username").value = entries[index].userName;
 //     document.getElementById("Password").value = entries[index].password;
 
-//     deleteRow(index); // Delete the current row for editing
+//     deleteRow(index); 
 // }
 
 // function deleteRow(index) {
-//     entries.splice(index, 1);
-//     renderTable();
+//     entries.splice(index, 1); 
+//     renderTable(); 
 // }
 
 
 
-let entries = [];
 
-function MyButton(event) {
+
+
+
+//CRUD OPERATION USING LOCAL STORAGE
+let entries = JSON.parse(localStorage.getItem("entries")) || [];  
+
+// Load and render table from local storage on page load
+window.onload = () => {
+    renderTable();
+};
+
+// Click function to add new entry
+function Click(event) {
     event.preventDefault();
 
-    // Fetching input values
-    let userName = document.getElementById('usernameInput').value;
-    let password = document.getElementById('passwordInput').value;
+    let userName = document.getElementById('Username').value;
+    let password = document.getElementById('Password').value;
 
-    // Error message elements
-    let nameError = document.getElementById('usernameError');
+    let nameError = document.getElementById('nameError');
     let passwordError = document.getElementById('passwordError');
 
-    // Validation
     let valid = true;
 
     if (userName.trim() === "") {
         nameError.textContent = "Username is required*";
         nameError.style.color = "red";
+        nameError.style.fontSize = "13px";
+        nameError.style.paddingLeft = "15px";
         valid = false;
     } else {
         nameError.textContent = '';
@@ -117,21 +127,24 @@ function MyButton(event) {
     if (password.trim() === "") {
         passwordError.textContent = "Password is required*";
         passwordError.style.color = "red";
+        passwordError.style.fontSize = "13px";
+        passwordError.style.paddingLeft = "15px";
         valid = false;
     } else {
         passwordError.textContent = '';
     }
 
-    // Add entry if valid
     if (valid) {
         entries.push({ userName, password });
-        renderTable();
+        saveToLocalStorage(); 
+        renderTable();  
         document.getElementById('form').reset();
     }
 }
 
+// Function to render the table
 function renderTable() {
-    const tableBody = document.getElementById("tableBody");
+    const tableBody = document.getElementById("table-body");
 
     let rowsHTML = '';
     for (let i = 0; i < entries.length; i++) {
@@ -141,25 +154,34 @@ function renderTable() {
                 <td>${entries[i].userName}</td>
                 <td>${entries[i].password}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editRow(${i})">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteRow(${i})">Delete</button>
+                    <button style="background-color: Green;font-size:18px; padding:5px 5px; border-radius:5px;" onclick="editRow(${i})">Edit</button>
+                    <button style="background-color:red;font-size:18px; padding:5px 5px; border-radius:8px;" onclick="deleteRow(${i})">Delete</button>
                 </td>
             </tr>
         `;
     }
+
     tableBody.innerHTML = rowsHTML;
 }
 
+// Function to edit an entry
 function editRow(index) {
-    // Populate fields with existing data
-    document.getElementById("usernameInput").value = entries[index].userName;
-    document.getElementById("passwordInput").value = entries[index].password;
+    document.getElementById("Username").value = entries[index].userName;
+    document.getElementById("Password").value = entries[index].password;
 
-    // Delete the entry after editing
-    deleteRow(index);
+    deleteRow(index);  
 }
 
+// Function to delete an entry
 function deleteRow(index) {
-    entries.splice(index, 1);
-    renderTable();
+    entries.splice(index, 1);  
+    saveToLocalStorage();
+    renderTable();  
 }
+
+// Function to save entries array to local storage
+function saveToLocalStorage() {
+    localStorage.setItem("entries", JSON.stringify(entries)); 
+}
+
+
