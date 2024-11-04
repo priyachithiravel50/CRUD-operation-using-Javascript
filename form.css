@@ -1,0 +1,34 @@
+
+body{
+    color: white;
+    background-color: black;
+}
+.con{
+    background-color: black;
+    color: white;
+}
+h2{
+    margin-top: 20%;
+}
+#update{
+    display: none;
+}
+
+.cols{
+    margin-left: 30%;
+    margin-top: 3%;
+}
+.data{
+    margin-left: 30%;
+}
+
+label{
+    padding: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 100px;
+}
+input{
+    padding: 10px;
+
+}
